@@ -9,9 +9,11 @@ import { AxiosInstance } from 'axios';
 
 import { UserSchema } from '@/entities/User';
 import { rtkApi } from '@/shared/api/rtkApi';
+import { PostSchema } from '@/entities/Post';
 
 export interface StateSchema {
     user: UserSchema;
+    post: PostSchema;
     [rtkApi.reducerPath]: ReturnType<typeof rtkApi.reducer>;
 
     // asynchronous reducers

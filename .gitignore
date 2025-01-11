@@ -4,3 +4,5 @@
 /client/dist
 
 /server/node_modules
+/server/uploads
+/server/migrations

@@ -1,0 +1,11 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": "qwerty123",
+    "database": "test-blog",
+    "host": "127.0.0.1",
+    "dialect": "postgres",
+    "accessTokenSecret": "your_access_token_secret",
+    "refreshTokenSecret": "your_refresh_token_secret"
+  }
+}

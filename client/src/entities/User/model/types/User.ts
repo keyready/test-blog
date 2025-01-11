@@ -8,7 +8,6 @@ export interface ServerUser {
 
     username: string;
     password: string;
-    avatar: string;
 
     firstname: string;
     lastname: string;

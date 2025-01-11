@@ -1,4 +1,5 @@
 .control-group {
+    width: 100%;
     display: flex;
     gap: 4px;
     margin-bottom: 10px;
@@ -11,8 +12,10 @@
 
     button {
         padding: 5px 10px;
+        color: white !important;
         background: var(--inverted-bg-color);
         transition: 200ms;
+        line-height: 125%;
 
         &:hover {
             background: var(--input-hover-bg);
@@ -62,13 +65,23 @@
 
     h1,
     h2,
-    h3,
-    h4,
-    h5,
-    h6 {
+    h3 {
         line-height: 1.1;
         margin-top: 2.5rem;
         text-wrap: pretty;
+    }
+
+    h1,
+    h2,
+    h3,
+    p,
+    ol,
+    ul,
+    li,
+    code,
+    blockquote,
+    mark {
+        color: white;
     }
 
     h1,
@@ -93,21 +106,17 @@
     code {
         padding: 0.25em 0.3em;
         border-radius: 0.4rem;
-        color: var(--black);
         font-size: 0.85rem;
-        background-color: var(--purple-light);
     }
 
     pre {
         padding: 0.75rem 1rem;
         border-radius: 0.5rem;
-        color: var(--white);
         background: var(--input-hover-bg);
         font-family: JetBrainsMono, monospace;
 
         code {
             padding: 0;
-            color: inherit;
             background: none;
             font-size: 0.8rem;
         }
@@ -167,6 +176,7 @@
     button {
         width: 100%;
         padding: 5px 10px;
+        color: white;
         background: var(--inverted-bg-color);
         display: flex;
         flex-direction: row;
@@ -189,12 +199,7 @@
         }
 
         &.is-active {
-            color: var(--purple);
-            background-color: var(--white);
-
-            &:hover {
-                color: var(--purple-contrast);
-            }
+            background-color: white;
         }
     }
 }

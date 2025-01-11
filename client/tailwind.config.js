@@ -3,6 +3,7 @@
 const { nextui } = require('@nextui-org/react');
 
 module.exports = {
+    important: true,
     content: [
         './index.html',
         './src/**/*.{js,ts,jsx,tsx}',
@@ -23,7 +24,7 @@ module.exports = {
         extend: {
             colors: {
                 'main': '#f0f0f0',
-                'main-bg': '#303030',
+                'main-bg': '#191919',
                 'card-bg': '#444',
                 'accent': '#ff9900',
                 'input-bg': '#27272a',
@@ -36,10 +37,14 @@ module.exports = {
     plugins: [
         nextui({
             themes: {
-                dark: {
+                light: {
                     colors: {
                         danger: {
                             DEFAULT: 'rgb(239 68 68)',
+                        },
+                        default: {
+                            DEFAULT: '#3f3f46',
+                            foreground: 'white',
                         },
                     },
                 },

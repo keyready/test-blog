@@ -15,13 +15,14 @@ export const Toaster = memo((props: ToasterProps) => {
     return (
         <ReactHotToaster
             containerClassName={classNames(classes.Toaster, {}, [className])}
-            position="top-center"
+            position="bottom-center"
             reverseOrder={false}
             gutter={8}
             containerStyle={{}}
             toastOptions={{
                 className: '',
                 style: {
+                    borderRadius: '8px',
                     background: '#27272a',
                     color: '#b8b8b8',
                     textAlign: 'center',

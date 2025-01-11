@@ -14,19 +14,29 @@ import { Color } from '@tiptap/extension-color';
 import Text from '@tiptap/extension-text';
 import TextAlign from '@tiptap/extension-text-align';
 import Typography from '@tiptap/extension-typography';
-import { Editor, EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import { useEffect } from 'react';
+import { Editor, EditorContent, useEditor } from '@tiptap/react';
+import { useCallback, useEffect, useMemo } from 'react';
 
 import { Video } from '../../extensions/video';
 import { TextEditorToolbar } from '../TextEditorToolbar/TextEditorToolbar';
 import { TextEditorFloatingMenu } from '../TextEditorFloatingMenu/TextEditorFloatingMenu';
 
+import { Button } from '@/shared/ui/Button';
+import { VStack } from '@/shared/ui/Stack';
+
 const CustomDocument = Document.extend({
     content: 'heading block*',
 });
 
-export const TextEditor = () => {
+interface TextEditorProps {
+    onSave: (content: FormData) => void;
+    isLoading?: boolean;
+}
+
+export const TextEditor = (props: TextEditorProps) => {
+    const { onSave, isLoading = false } = props;
+
     const editor = useEditor({
         extensions: [
             CustomDocument,
@@ -104,25 +114,78 @@ export const TextEditor = () => {
                 },
             }),
         ],
-        content: `
-      <h1>
-        Как я появился на свет?
-      </h1>
-      <p>
-        Всем привет! Меня зовут Родион. Я прохожу собеседование на Middle React Developer
-      </p>
-    `,
+        content: '',
     });
 
     useEffect(() => {
-        console.log(editor?.getHTML());
-    }, [editor?.getHTML()]);
+        if (!editor) {
+            return undefined;
+        }
+
+        editor.setEditable(!isLoading);
+    }, [editor, isLoading]);
+
+    const isButtonDisabled = useMemo(() => !editor?.getText().length, [editor?.getText()]);
+
+    const handleSaveClick = useCallback(async () => {
+        if (!editor) return;
+
+        const content = editor.getHTML();
+        const formData = new FormData();
+
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(content, 'text/html');
+        const images = doc.querySelectorAll('img');
+        const videos = doc.querySelectorAll('video');
+
+        const files: { element: HTMLImageElement | HTMLVideoElement; file: File }[] = [];
+
+        images.forEach((img, index) => {
+            const base64Data = img.src.split(',')[1];
+            const byteCharacters = atob(base64Data);
+            const byteArrays = new Uint8Array(byteCharacters.length);
+
+            for (let i = 0; i < byteCharacters.length; i++) {
+                byteArrays[i] = byteCharacters.charCodeAt(i);
+            }
+
+            const blob = new Blob([byteArrays], { type: img.src.split(':')[1].split(';')[0] });
+            const file = new File([blob], `image-${index}.png`, { type: blob.type });
+            files.push({ element: img, file });
+        });
+
+        videos.forEach((video, index) => {
+            const base64Data = video.src.split(',')[1];
+            const byteCharacters = atob(base64Data);
+            const byteArrays = new Uint8Array(byteCharacters.length);
+
+            for (let i = 0; i < byteCharacters.length; i++) {
+                byteArrays[i] = byteCharacters.charCodeAt(i);
+            }
+
+            const blob = new Blob([byteArrays], { type: video.src.split(':')[1].split(';')[0] });
+            const file = new File([blob], `video-${index}.mp4`, { type: blob.type });
+            files.push({ element: video, file });
+        });
+
+        files.forEach(({ element, file }, index) => {
+            element.src = `./files/${file.name}`;
+            formData.append(`files`, file);
+        });
+
+        formData.append('body', doc.body.innerHTML);
+
+        onSave(formData);
+    }, [editor?.getHTML(), onSave, editor]);
 
     return (
-        <>
+        <VStack maxW gap="12px">
             <TextEditorToolbar editor={editor} />
-            <EditorContent editor={editor} />
+            <EditorContent className="w-full" editor={editor} />
             {editor && <TextEditorFloatingMenu editor={editor} />}
-        </>
+            <Button isDisabled={isButtonDisabled} onPress={handleSaveClick} className="self-end">
+                Опубликовать!
+            </Button>
+        </VStack>
     );
 };
