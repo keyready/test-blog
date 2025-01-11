@@ -3,7 +3,6 @@
 const { nextui } = require('@nextui-org/react');
 
 module.exports = {
-    important: true,
     content: [
         './index.html',
         './src/**/*.{js,ts,jsx,tsx}',

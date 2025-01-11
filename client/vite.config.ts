@@ -20,6 +20,9 @@ export default defineConfig({
     define: {
         IS_DEV: JSON.stringify(true),
     },
+    optimizeDeps: {
+        include: ['@tiptap/core', '@tiptap/react', '@tiptap/starter-kit'],
+    },
     server: {
         port: 3000,
         proxy: {

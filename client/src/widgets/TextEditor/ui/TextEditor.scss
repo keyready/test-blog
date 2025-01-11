@@ -1,0 +1,212 @@
+.control-group {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+.button-group {
+    display: flex;
+    flex-wrap: wrap;
+
+    button {
+        padding: 5px 10px;
+        background: var(--inverted-bg-color);
+        transition: 200ms;
+
+        &:hover {
+            background: var(--input-hover-bg);
+        }
+
+        &.is-active {
+            background: var(--input-hover-bg);
+        }
+
+        &:first-child {
+            border-bottom-left-radius: 8px;
+            border-top-left-radius: 8px;
+        }
+
+        &:last-child {
+            border-bottom-right-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+    }
+}
+
+
+.tiptap {
+    :first-child {
+        margin-top: 0;
+    }
+
+    ul,
+    ol {
+        margin: 1.25rem 1rem 1.25rem 0.4rem;
+        padding: 0 1rem;
+
+        li p {
+            margin-top: 0.25em;
+            margin-bottom: 0.25em;
+            margin-left: 0.25rem;
+        }
+    }
+
+    ul {
+        list-style: disc;
+    }
+
+    ol {
+        list-style: decimal;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        line-height: 1.1;
+        margin-top: 2.5rem;
+        text-wrap: pretty;
+    }
+
+    h1,
+    h2 {
+        margin-top: 3.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    h1 {
+        font-size: 1.4rem;
+        font-weight: bold;
+    }
+
+    h2 {
+        font-size: 1.2rem;
+    }
+
+    h3 {
+        font-size: 1.1rem;
+    }
+
+    code {
+        padding: 0.25em 0.3em;
+        border-radius: 0.4rem;
+        color: var(--black);
+        font-size: 0.85rem;
+        background-color: var(--purple-light);
+    }
+
+    pre {
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        color: var(--white);
+        background: var(--input-hover-bg);
+        font-family: JetBrainsMono, monospace;
+
+        code {
+            padding: 0;
+            color: inherit;
+            background: none;
+            font-size: 0.8rem;
+        }
+    }
+
+    blockquote {
+        margin: 1.5rem 0;
+        border-left: 3px solid var(--inverted-bg-color);
+        padding-left: 1rem;
+        font-style: italic;
+        opacity: 0.6;
+    }
+
+    mark {
+        padding: 0.1rem 0.3rem;
+        border-radius: 0.4rem;
+        background-color: #FAF594;
+        box-decoration-break: clone;
+    }
+
+    p.is-editor-empty:first-child::before {
+        height: 0;
+        color: #adb5bd;
+        content: attr(data-placeholder);
+        float: left;
+        pointer-events: none;
+    }
+
+    .is-empty::before {
+        height: 0;
+        color: #444;
+        content: attr(data-placeholder);
+        float: left;
+        pointer-events: none;
+    }
+
+    img, video {
+        width: 50%;
+        margin: 0 auto;
+    }
+}
+
+.floating-menu {
+    width: fit-content;
+    padding: 0.1rem;
+    border-radius: 0.5rem;
+    bottom: 100%;
+    position: absolute;
+    background-color: var(--inverted-bg-color);
+
+    .floating-button-group {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+    }
+
+    button {
+        width: 100%;
+        padding: 5px 10px;
+        background: var(--inverted-bg-color);
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        transition: 200ms;
+        text-wrap: nowrap;
+
+        &:first-child {
+            border-bottom-left-radius: 8px;
+            border-top-left-radius: 8px;
+        }
+
+        &:last-child {
+            border-bottom-right-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+
+        &:hover {
+            background: var(--input-hover-bg);
+        }
+
+        &.is-active {
+            color: var(--purple);
+            background-color: var(--white);
+
+            &:hover {
+                color: var(--purple-contrast);
+            }
+        }
+    }
+}
+
+.ProseMirror {
+    padding: 20px;
+    border-radius: 8px;
+    transition: 200ms;
+    outline: 2px solid var(--input-bg);
+    min-height: 400px;
+}
+
+.ProseMirror-focused {
+    outline: 2px solid var(--second-text-color);
+}
