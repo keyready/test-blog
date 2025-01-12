@@ -57,7 +57,7 @@ export const Navbar = (props: NavbarProps) => {
             justify="between"
             gap="64px"
         >
-            <AppLink to={RoutePath.main}>FSD App</AppLink>
+            <AppLink to={RoutePath.main}>Хабр до того, как стал известен</AppLink>
 
             {userProfile?.username ? (
                 <Dropdown className="relative">

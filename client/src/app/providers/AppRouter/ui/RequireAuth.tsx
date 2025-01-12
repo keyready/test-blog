@@ -13,7 +13,7 @@ export function RequireAuth({ children }: RequireAuthProps) {
     const currentLocation = useLocation();
 
     if (!userData) {
-        return <Navigate to={RoutePath.main} state={{ from: currentLocation }} replace />;
+        return <Navigate to={RoutePath.loading} state={{ from: currentLocation }} replace />;
     }
 
     return children;
