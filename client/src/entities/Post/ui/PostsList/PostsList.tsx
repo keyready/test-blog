@@ -1,13 +1,13 @@
-import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { PostCard } from '../PostCard/PostCard';
 import { usePosts } from '../../api/PostApi';
-import { CreatePostModal } from '../CreatePostModal/CreatePostModal';
 
 import { classNames } from '@/shared/lib/classNames';
 import { Skeleton } from '@/shared/ui/Skeleton';
 import { VStack } from '@/shared/ui/Stack';
 import { Button } from '@/shared/ui/Button';
+import { RoutePath } from '@/shared/config/routeConfig';
 
 interface PostsListProps {
     className?: string;
@@ -16,7 +16,7 @@ interface PostsListProps {
 export const PostsList = (props: PostsListProps) => {
     const { className } = props;
 
-    const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
+    const navigate = useNavigate();
 
     const { data: posts, isLoading: isPostsLoading } = usePosts();
 
@@ -36,16 +36,11 @@ export const PostsList = (props: PostsListProps) => {
                 <h1 className="text-xl">В блоге пока нет постов (</h1>
                 <h2 className="text-l">Будьте первым!</h2>
                 <Button
-                    onPress={() => setIsModalOpened(true)}
+                    onPress={() => navigate(RoutePath.create_post)}
                     className="py-2 px-5 h-fit rounded-md"
                 >
                     Рассказать всем!
                 </Button>
-
-                <CreatePostModal
-                    isModalOpened={isModalOpened}
-                    setIsModalOpened={setIsModalOpened}
-                />
             </VStack>
         );
     }

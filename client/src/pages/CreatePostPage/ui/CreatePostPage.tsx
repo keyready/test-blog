@@ -1,19 +1,20 @@
-import { Modal, ModalContent } from '@nextui-org/react';
-import { useCallback, useEffect } from 'react';
+import { memo, useCallback, useEffect } from 'react';
+
+import classes from './CreatePostPage.module.scss';
 
 import { classNames } from '@/shared/lib/classNames';
+import { Page } from '@/widgets/Page';
 import { TextEditor } from '@/widgets/TextEditor';
-import { createPost } from '@/entities/Post/model/services/createPost';
+import { VStack } from '@/shared/ui/Stack';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
+import { createPost } from '@/entities/Post';
 
-interface CreatePostModalProps {
+interface CreatePostPageProps {
     className?: string;
-    isModalOpened: boolean;
-    setIsModalOpened: (state: boolean) => void;
 }
 
-export const CreatePostModal = (props: CreatePostModalProps) => {
-    const { className, setIsModalOpened, isModalOpened } = props;
+const CreatePostPage = memo((props: CreatePostPageProps) => {
+    const { className } = props;
 
     const dispatch = useAppDispatch();
 
@@ -21,6 +22,7 @@ export const CreatePostModal = (props: CreatePostModalProps) => {
         const handleCloseWindow = (ev: BeforeUnloadEvent) => {
             ev.preventDefault();
         };
+        document.title = 'Создание поста';
 
         window.addEventListener('beforeunload', handleCloseWindow);
 
@@ -37,25 +39,17 @@ export const CreatePostModal = (props: CreatePostModalProps) => {
     );
 
     return (
-        <Modal
-            size="5xl"
-            scrollBehavior="outside"
-            isOpen={isModalOpened}
-            onClose={() => {
-                const result = confirm('Введенные Вами данные не сохранятся!');
-                if (result) {
-                    setIsModalOpened(false);
-                }
-            }}
-        >
-            <ModalContent className={classNames('bg-main-bg p-5', {}, [className])}>
+        <Page className={classNames(classes.CreatePostPage, {}, [className])}>
+            <VStack maxW>
                 <h1 className="text-white text-2xl font-bold">Создание статьи</h1>
                 <p className="italic text-l text-white text-opacity-70 mb-7 ">
                     Расскажите всем, что Вы думаете! Публикуйте свои мысли, наработки или просто
                     забавные истории!
                 </p>
                 <TextEditor onSave={handleSavePost} />
-            </ModalContent>
-        </Modal>
+            </VStack>
+        </Page>
     );
-};
+});
+
+export default CreatePostPage;
