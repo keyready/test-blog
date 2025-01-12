@@ -16,7 +16,7 @@ import TextAlign from '@tiptap/extension-text-align';
 import Typography from '@tiptap/extension-typography';
 import StarterKit from '@tiptap/starter-kit';
 import { Editor, EditorContent, useEditor } from '@tiptap/react';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Video } from '../../extensions/video';
 import { TextEditorToolbar } from '../TextEditorToolbar/TextEditorToolbar';
@@ -24,6 +24,7 @@ import { TextEditorFloatingMenu } from '../TextEditorFloatingMenu/TextEditorFloa
 
 import { Button } from '@/shared/ui/Button';
 import { VStack } from '@/shared/ui/Stack';
+import { Input } from '@/shared/ui/Input';
 
 const CustomDocument = Document.extend({
     content: 'heading block*',
@@ -36,6 +37,8 @@ interface TextEditorProps {
 
 export const TextEditor = (props: TextEditorProps) => {
     const { onSave, isLoading = false } = props;
+
+    const [postTitle, setPostTitle] = useState<string>('');
 
     const editor = useEditor({
         extensions: [
@@ -125,7 +128,10 @@ export const TextEditor = (props: TextEditorProps) => {
         editor.setEditable(!isLoading);
     }, [editor, isLoading]);
 
-    const isButtonDisabled = useMemo(() => !editor?.getText().length, [editor?.getText()]);
+    const isButtonDisabled = useMemo(
+        () => !editor?.getText().length || !postTitle,
+        [postTitle, editor?.getText()],
+    );
 
     const handleSaveClick = useCallback(async () => {
         if (!editor) return;
@@ -169,17 +175,25 @@ export const TextEditor = (props: TextEditorProps) => {
         });
 
         files.forEach(({ element, file }, index) => {
-            element.src = `./files/${file.name}`;
+            element.src = `/static/${file.name}`;
             formData.append(`files`, file);
         });
 
         formData.append('body', doc.body.innerHTML);
+        formData.append('title', postTitle);
 
         onSave(formData);
-    }, [editor?.getHTML(), onSave, editor]);
+    }, [editor?.getHTML(), onSave, editor, postTitle]);
 
     return (
         <VStack maxW gap="12px">
+            <Input
+                isRequired
+                value={postTitle}
+                onValueChange={setPostTitle}
+                label="Название статьи"
+                className="mb-10"
+            />
             <TextEditorToolbar editor={editor} />
             <EditorContent className="w-full" editor={editor} />
             {editor && <TextEditorFloatingMenu editor={editor} />}

@@ -25,6 +25,8 @@ app.use('/api', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api', postRoutes);
 
+app.use('/static/', express.static(path.resolve(__dirname, './uploads/')))
+
 // {force: true}
 sequelize.sync().then(() => {
     console.log('Database & tables created!');

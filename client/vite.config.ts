@@ -31,6 +31,11 @@ export default defineConfig({
                 changeOrigin: true,
                 rewrite: (path) => path.replace(/^\/api\//, ''),
             },
+            '/static': {
+                target: 'http://localhost:5000/static',
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/static\//, ''),
+            },
         },
     },
 });

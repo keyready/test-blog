@@ -1,4 +1,5 @@
 import { memo, useCallback, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import classes from './CreatePostPage.module.scss';
 
@@ -8,6 +9,8 @@ import { TextEditor } from '@/widgets/TextEditor';
 import { VStack } from '@/shared/ui/Stack';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 import { createPost } from '@/entities/Post';
+import { toastDispatch } from '@/widgets/Toaster';
+import { RoutePath } from '@/shared/config/routeConfig';
 
 interface CreatePostPageProps {
     className?: string;
@@ -16,6 +19,7 @@ interface CreatePostPageProps {
 const CreatePostPage = memo((props: CreatePostPageProps) => {
     const { className } = props;
 
+    const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
     useEffect(() => {
@@ -33,9 +37,17 @@ const CreatePostPage = memo((props: CreatePostPageProps) => {
 
     const handleSavePost = useCallback(
         async (content: FormData) => {
-            await dispatch(createPost(content));
+            const result = await toastDispatch(dispatch(createPost(content)), {
+                error: 'Что-то сломалось(',
+                loading: 'Отправляем на сервер...',
+                success: 'Статья опубликована!',
+            });
+
+            if (result.meta.requestStatus === 'fulfilled') {
+                navigate(RoutePath.main);
+            }
         },
-        [dispatch],
+        [dispatch, navigate],
     );
 
     return (

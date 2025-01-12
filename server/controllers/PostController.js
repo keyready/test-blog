@@ -1,8 +1,7 @@
-const {Post} = require('../models');
+const {Post, User} = require('../models');
 const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
-const authService = require('../services/authService');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -29,21 +28,32 @@ class PostController {
         try {
             upload(req, res, async (err) => {
                 if (err) {
-                    console.log(err)
                     return res.status(500).json({error: err.message});
                 }
 
-                console.log(req.body)
-                console.log(req.files)
+                const {title, body} = req.body;
+                const {id: userId} = req.user
 
-                const {title, body, userId} = req.body;
                 let files = [];
 
+                let newHTMLBody = body
                 if (req.files) {
-                    files = req.files.map(file => `/uploads/${file.filename}`);
+                    files = req.files.map(file => ({
+                        originalName: file.originalname,
+                        serverPath: `/uploads/${file.filename}`
+                    }));
+
+                    files.forEach(({originalName, serverPath}, index) => {
+                        newHTMLBody = newHTMLBody.replace(originalName, serverPath.split('/uploads/')[1]);
+                    });
                 }
 
-                const post = await Post.create({title, body, userId, files: JSON.stringify(files)});
+                const post = await Post.create({
+                    title,
+                    body: newHTMLBody,
+                    userId,
+                    files: JSON.stringify(files.map(file => file.serverPath))
+                });
                 res.status(201).json(post);
             });
         } catch (error) {
@@ -54,7 +64,12 @@ class PostController {
 
     static async getPosts(req, res) {
         try {
-            const posts = await Post.findAll({include: [{model: User, as: 'user'}]});
+            const posts = await Post.findAll({
+                include: [{
+                    model: User, as: 'user',
+                    attributes: {exclude: ['password', 'refreshToken', 'updatedAt']}
+                }]
+            });
             res.json(posts);
         } catch (error) {
             res.status(500).json({error: error.message});

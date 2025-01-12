@@ -1,6 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 
+import { UserActions } from '../../slice/UserSlice';
+
 import { ThunkConfig } from '@/app/providers/StoreProvider/config/StateSchema';
 
 export const logoutService = createAsyncThunk<string, void, ThunkConfig<string>>(
@@ -9,7 +11,9 @@ export const logoutService = createAsyncThunk<string, void, ThunkConfig<string>>
         const { extra, rejectWithValue, dispatch } = thunkAPI;
 
         try {
-            const response = await extra.api.get<string>('/api/auth/logout');
+            const response = await extra.api.post<string>('/api/auth/logout', {});
+
+            dispatch(UserActions.logout());
 
             if (!response.data) {
                 throw new Error();

@@ -46,7 +46,7 @@ export const PostsList = (props: PostsListProps) => {
     }
 
     return (
-        <VStack maxW className={classNames('', {}, [className])}>
+        <VStack gap="24px" maxW className={classNames('', {}, [className])}>
             {posts.map((post) => (
                 <PostCard post={post} key={post.id} />
             ))}

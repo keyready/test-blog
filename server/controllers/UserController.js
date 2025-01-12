@@ -1,10 +1,14 @@
 const { User } = require('../models');
 
 class UserController {
-    static async getAllUsers(req, res) {
+    static async getUserProfile(req, res) {
         try {
-            const users = await User.findAll();
-            res.json(users);
+            const { id } = req.user;
+            const user = await User.findOne({ where: { id }, attributes: { exclude: ['password', 'refreshToken', 'updatedAt'] } });
+            if (!user) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+            res.json(user);
         } catch (error) {
             res.status(500).json({ error: error.message });
         }

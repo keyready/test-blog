@@ -7,6 +7,7 @@ import { UserActions } from '../../model/slice/UserSlice';
 
 import { classNames } from '@/shared/lib/classNames';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
+import { getUserDataService } from '@/entities/User';
 
 interface AuthModalProps {
     className?: string;
@@ -26,13 +27,14 @@ export const AuthModal = (props: AuthModalProps) => {
         dispatch(UserActions.clearAuthError());
     }, [dispatch]);
 
-    const handleSuccessAuth = useCallback(() => {
+    const handleSuccessAuth = useCallback(async () => {
         if (isLoginActive) {
+            await dispatch(getUserDataService());
             setIsModalOpened(false);
         } else {
             setIsLoginActive(true);
         }
-    }, [isLoginActive]);
+    }, [isLoginActive, dispatch]);
 
     return (
         <Modal

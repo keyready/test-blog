@@ -1,8 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 
+import { User } from '../../types/User';
+
 import { ThunkConfig } from '@/app/providers/StoreProvider/config/StateSchema';
-import { User } from '@/entities/User';
 
 export const getUserDataService = createAsyncThunk<User, void, ThunkConfig<string>>(
     'User/getUserData',
@@ -10,7 +11,7 @@ export const getUserDataService = createAsyncThunk<User, void, ThunkConfig<strin
         const { extra, rejectWithValue } = thunkAPI;
 
         try {
-            const response = await extra.api.get<User>(`/api/get_user_data`);
+            const response = await extra.api.get<User>(`/api/profile`);
 
             if (!response.data) {
                 throw new Error();

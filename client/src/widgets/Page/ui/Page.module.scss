@@ -1,6 +1,6 @@
 .Page {
     height: calc(100vh - var(--navbar-heigth));
-    padding: 20px 80px;
+    padding: 20px 15%;
     display: flex;
     flex-direction: column;
     align-items: start;
@@ -16,7 +16,7 @@
 
 @media (width < 1010px) {
     .Page {
-        padding: 30px;
+        padding: 30px 10%;
     }
 
 }
