@@ -2,6 +2,7 @@ const {Post, User} = require('../models');
 const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
+const {Op} = require("sequelize");
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -64,13 +65,36 @@ class PostController {
 
     static async getPosts(req, res) {
         try {
-            const posts = await Post.findAll({
+            const {
+                page,
+                q,
+                order
+            } = req.query
+
+            const params = {
+                limit: page * 5,
+            }
+            if (q) {
+                params.where = {
+                    [Op.or]: [
+                        {title: {[Op.iLike]: `%${q}%`}},
+                        {body: {[Op.iLike]: `%${q}%`}}
+                    ]
+                }
+                params.limit = undefined
+                params.offset = 0
+            }
+
+            const {count, rows: posts} = await Post.findAndCountAll({
                 include: [{
                     model: User, as: 'user',
                     attributes: {exclude: ['password', 'refreshToken', 'updatedAt']}
-                }]
+                }],
+                order: [['createdAt', order]],
+                ...params
             });
-            res.json(posts);
+
+            res.json({posts, hasMore: count > page * 5});
         } catch (error) {
             res.status(500).json({error: error.message});
         }

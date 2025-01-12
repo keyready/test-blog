@@ -21,6 +21,12 @@ app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'uploads')));
 
+
+// моковая задержка для имитации задержки сети
+app.use('/*', (req, res, next) => {
+    setTimeout(() => next(), 1000)
+})
+
 app.use('/api', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api', postRoutes);

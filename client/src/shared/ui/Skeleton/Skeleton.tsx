@@ -12,7 +12,7 @@ export const Skeleton = (props: SkeletonProps) => {
 
     return (
         <ContentLoader
-            speed={2}
+            speed={1}
             width={width}
             height={height}
             viewBox={`0 0 ${width} ${height}`}

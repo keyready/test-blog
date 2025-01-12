@@ -33,7 +33,7 @@ export const routerConfig: Record<AppRoutes, AppRoutesProps> = {
     [AppRoutes.CRETE_POST]: {
         path: RoutePath.create_post,
         element: <CreatePostPage />,
-        // authOnly: true,
+        authOnly: true,
     },
 
     // last
