@@ -5,14 +5,14 @@ const authService = require('../services/authService');
 class AuthController {
     static async register(req, res) {
         try {
-            const { firstName, lastName, email, password } = req.body;
-            const existingUser = await User.findOne({ where: { email } });
+            const { firstname, lastname, username, password } = req.body;
+            const existingUser = await User.findOne({ where: { username } });
 
             if (existingUser) {
                 return res.status(409).json({ message: 'User already exists' });
             }
 
-            const user = await User.create({ firstName, lastName, email, password });
+            await User.create({ firstname, lastname, username, password });
             res.status(201).json({ message: 'User registered successfully' });
         } catch (error) {
             res.status(500).json({ error: error.message });
@@ -21,20 +21,20 @@ class AuthController {
 
     static async login(req, res) {
         try {
-            const { email, password } = req.body;
-            const user = await User.findOne({ where: { email } });
+            const { username, password } = req.body;
+            const user = await User.findOne({ where: { username } });
 
             if (!user) {
-                return res.status(401).json({ message: 'Invalid email or password' });
+                return res.status(403).json({ message: 'Invalid username or password' });
             }
 
             const isPasswordValid = await bcrypt.compare(password, user.password);
             if (!isPasswordValid) {
-                return res.status(401).json({ message: 'Invalid email or password' });
+                return res.status(403).json({ message: 'Invalid username or password' });
             }
 
-            const accessToken = authService.generateAccessToken({ id: user.id, email: user.email });
-            const refreshToken = authService.generateRefreshToken({ id: user.id, email: user.email });
+            const accessToken = authService.generateAccessToken({ id: user.id, username: user.username });
+            const refreshToken = authService.generateRefreshToken({ id: user.id, username: user.username });
 
             user.refreshToken = refreshToken;
             await user.save();
@@ -85,7 +85,7 @@ class AuthController {
                 return res.sendStatus(403);
             }
 
-            const accessToken = authService.generateAccessToken({ id: user.id, email: user.email });
+            const accessToken = authService.generateAccessToken({ id: user.id, username: user.username });
             res.json({ accessToken });
         } catch (error) {
             console.log(error)

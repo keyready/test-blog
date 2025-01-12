@@ -1,9 +1,13 @@
+import { useState } from 'react';
+
 import classes from './Navbar.module.scss';
 
 import { classNames } from '@/shared/lib/classNames';
 import { HStack } from '@/shared/ui/Stack';
 import { AppLink } from '@/shared/ui/AppLink';
 import { RoutePath } from '@/shared/config/routeConfig';
+import { AuthModal } from '@/entities/User/ui/AuthModal/AuthModal';
+import { Button } from '@/shared/ui/Button';
 
 interface NavbarProps {
     className?: string;
@@ -11,6 +15,8 @@ interface NavbarProps {
 
 export const Navbar = (props: NavbarProps) => {
     const { className } = props;
+
+    const [isModalOpened, setIsModalOpened] = useState<boolean>(false);
 
     return (
         <HStack
@@ -20,7 +26,8 @@ export const Navbar = (props: NavbarProps) => {
             gap="64px"
         >
             <AppLink to={RoutePath.main}>FSD App</AppLink>
-            <h1>created by keyready</h1>
+            <Button onPress={() => setIsModalOpened(true)}>Login</Button>
+            <AuthModal isModalOpened={isModalOpened} setIsModalOpened={setIsModalOpened} />
         </HStack>
     );
 };

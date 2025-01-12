@@ -25,6 +25,7 @@ app.use('/api', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api', postRoutes);
 
+// {force: true}
 sequelize.sync().then(() => {
     console.log('Database & tables created!');
 });
