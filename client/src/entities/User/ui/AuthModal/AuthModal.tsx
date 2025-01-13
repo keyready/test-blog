@@ -34,10 +34,11 @@ export const AuthModal = (props: AuthModalProps) => {
         } else {
             setIsLoginActive(true);
         }
-    }, [isLoginActive, dispatch]);
+    }, [isLoginActive, dispatch, setIsModalOpened]);
 
     return (
         <Modal
+            backdrop="blur"
             size="4xl"
             isOpen={isModalOpened}
             onClose={() => setIsModalOpened(false)}

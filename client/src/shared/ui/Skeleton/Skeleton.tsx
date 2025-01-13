@@ -20,7 +20,8 @@ export const Skeleton = (props: SkeletonProps) => {
             foregroundColor="#444"
             className={className}
         >
-            <rect x="0" y="0" rx={rounded} ry={rounded} width="100%" height="100%" />
+            <rect x="0" y="0" rx={rounded} ry={rounded} width="100%"
+height="100%" />
         </ContentLoader>
     );
 };

@@ -130,7 +130,7 @@ export const TextEditor = (props: TextEditorProps) => {
 
     const isButtonDisabled = useMemo(
         () => !editor?.getText().length || !postTitle,
-        [postTitle, editor?.getText()],
+        [editor, postTitle],
     );
 
     const handleSaveClick = useCallback(async () => {
@@ -151,7 +151,7 @@ export const TextEditor = (props: TextEditorProps) => {
             const byteCharacters = atob(base64Data);
             const byteArrays = new Uint8Array(byteCharacters.length);
 
-            for (let i = 0; i < byteCharacters.length; i++) {
+            for (let i = 0; i < byteCharacters.length; i += 1) {
                 byteArrays[i] = byteCharacters.charCodeAt(i);
             }
 
@@ -165,7 +165,7 @@ export const TextEditor = (props: TextEditorProps) => {
             const byteCharacters = atob(base64Data);
             const byteArrays = new Uint8Array(byteCharacters.length);
 
-            for (let i = 0; i < byteCharacters.length; i++) {
+            for (let i = 0; i < byteCharacters.length; i += 1) {
                 byteArrays[i] = byteCharacters.charCodeAt(i);
             }
 
