@@ -1,9 +1,11 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { PostSchema } from '../types/PostSchema';
 import { createPost } from '../services/createPost';
 import { editPost } from '../services/editPost';
 import { deletePost } from '../services/deletePost';
+import { Post } from '../types/Post';
+import { getPost } from '../services/getPost';
 
 const initialState: PostSchema = {
     data: undefined,
@@ -33,10 +35,24 @@ export const PostSlice = createSlice({
                 state.error = undefined;
                 state.isLoading = true;
             })
-            .addCase(editPost.fulfilled, (state) => {
+            .addCase(editPost.fulfilled, (state, action: PayloadAction<Post>) => {
                 state.isLoading = false;
+                state.data = action.payload;
             })
             .addCase(editPost.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
+            })
+
+            .addCase(getPost.pending, (state) => {
+                state.error = undefined;
+                state.isLoading = true;
+            })
+            .addCase(getPost.fulfilled, (state, action: PayloadAction<Post>) => {
+                state.isLoading = false;
+                state.data = action.payload;
+            })
+            .addCase(getPost.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.payload;
             })

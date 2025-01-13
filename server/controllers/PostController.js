@@ -1,4 +1,4 @@
-const {Post, User} = require('../models');
+const {User, Post} = require('../models');
 const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
@@ -24,6 +24,24 @@ const upload = multer({
     }
 }).array('files');
 
+function replaceFilenames(body, files) {
+    let localFiles = [];
+
+    let newHTMLBody = body
+    if (files) {
+        localFiles = files.map(file => ({
+            originalName: file.originalname,
+            serverPath: `/uploads/${file.filename}`
+        }));
+
+        localFiles.forEach(({originalName, serverPath}, index) => {
+            newHTMLBody = newHTMLBody.replace(originalName, serverPath.split('/uploads/')[1]);
+        });
+    }
+
+    return {newHTMLBody, localFiles}
+}
+
 class PostController {
     static async createPost(req, res) {
         try {
@@ -35,19 +53,7 @@ class PostController {
                 const {title, body} = req.body;
                 const {id: userId} = req.user
 
-                let files = [];
-
-                let newHTMLBody = body
-                if (req.files) {
-                    files = req.files.map(file => ({
-                        originalName: file.originalname,
-                        serverPath: `/uploads/${file.filename}`
-                    }));
-
-                    files.forEach(({originalName, serverPath}, index) => {
-                        newHTMLBody = newHTMLBody.replace(originalName, serverPath.split('/uploads/')[1]);
-                    });
-                }
+                const {localFiles: files, newHTMLBody} = replaceFilenames(body, req.files)
 
                 const post = await Post.create({
                     title,
@@ -68,21 +74,31 @@ class PostController {
             const {
                 page,
                 q,
-                order
+                order,
+                owner
             } = req.query
 
             const params = {
                 limit: page * 5,
+                where: {}
             }
+
             if (q) {
                 params.where = {
                     [Op.or]: [
                         {title: {[Op.iLike]: `%${q}%`}},
-                        {body: {[Op.iLike]: `%${q}%`}}
-                    ]
+                        {body: {[Op.iLike]: `%${q}%`}},
+                    ],
                 }
                 params.limit = undefined
                 params.offset = 0
+            }
+
+            if (owner === 'own') {
+                params.where = {
+                    ...params.where,
+                    ...(owner === 'own' ? {userId: req.user.id} : {})
+                }
             }
 
             const {count, rows: posts} = await Post.findAndCountAll({
@@ -100,27 +116,45 @@ class PostController {
         }
     }
 
-    static async updatePost(req, res) {
+    static async getPostByPk(req, res) {
         try {
             const {id} = req.params;
-            const {title, body} = req.body;
-            let files = [];
 
-            if (req.files) {
-                files = req.files.map(file => `/uploads/${file.filename}`);
-            }
+            console.log(id)
 
-            const post = await Post.findByPk(id);
+            const post = await Post.findByPk(id, {raw: true});
+
             if (!post) {
                 return res.status(404).json({message: 'Post not found'});
             }
 
-            post.title = title;
-            post.body = body;
-            post.files = JSON.stringify(files);
-            await post.save();
+            res.status(200).json(post);
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({error: error.message});
+        }
+    }
 
-            res.json(post);
+    static async updatePost(req, res) {
+        try {
+            upload(req, res, async () => {
+                const {id} = req.params;
+                const {title, body} = req.body;
+
+                const post = await Post.findByPk(id);
+                if (!post) {
+                    return res.status(404).json({message: 'Post not found'});
+                }
+
+                const {localFiles: files, newHTMLBody} = replaceFilenames(body, req.files)
+
+                post.title = title;
+                post.body = newHTMLBody;
+                post.files = JSON.stringify(files);
+                const newPost = await post.save();
+
+                res.json(newPost);
+            })
         } catch (error) {
             res.status(500).json({error: error.message});
         }

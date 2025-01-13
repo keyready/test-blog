@@ -1,17 +1,19 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 
+import { Post } from '../types/Post';
+
 import { ThunkConfig } from '@/app/providers/StoreProvider/config/StateSchema';
 
-export const deletePost = createAsyncThunk<
+export const getPost = createAsyncThunk<
+    Post,
     string,
-    number,
     ThunkConfig<{ code: number; message: string }>
->('Post/deletePost', async (postId, thunkAPI) => {
-    const { extra, rejectWithValue } = thunkAPI;
+>('Post/getPost', async (postId, thunkAPI) => {
+    const { extra, rejectWithValue, dispatch } = thunkAPI;
 
     try {
-        const response = await extra.api.delete<string>(`/api/posts/${postId}`);
+        const response = await extra.api.get<Post>(`/api/posts/${postId}`);
 
         if (!response.data) {
             throw new Error();

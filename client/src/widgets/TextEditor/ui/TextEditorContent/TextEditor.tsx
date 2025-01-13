@@ -25,6 +25,7 @@ import { TextEditorFloatingMenu } from '../TextEditorFloatingMenu/TextEditorFloa
 import { Button } from '@/shared/ui/Button';
 import { VStack } from '@/shared/ui/Stack';
 import { Input } from '@/shared/ui/Input';
+import { Post } from '@/entities/Post';
 
 const CustomDocument = Document.extend({
     content: 'heading block*',
@@ -32,13 +33,14 @@ const CustomDocument = Document.extend({
 
 interface TextEditorProps {
     onSave: (content: FormData) => void;
+    defaultContent?: Post;
     isLoading?: boolean;
 }
 
 export const TextEditor = (props: TextEditorProps) => {
-    const { onSave, isLoading = false } = props;
+    const { onSave, isLoading = false, defaultContent } = props;
 
-    const [postTitle, setPostTitle] = useState<string>('');
+    const [postTitle, setPostTitle] = useState<string>(defaultContent?.title || '');
 
     const editor = useEditor({
         extensions: [
@@ -117,7 +119,7 @@ export const TextEditor = (props: TextEditorProps) => {
                 },
             }),
         ],
-        content: '',
+        content: defaultContent?.body || '',
     });
 
     useEffect(() => {
@@ -147,6 +149,8 @@ export const TextEditor = (props: TextEditorProps) => {
         const files: { element: HTMLImageElement | HTMLVideoElement; file: File }[] = [];
 
         images.forEach((img, index) => {
+            if (img.src.includes('/static/')) return;
+
             const base64Data = img.src.split(',')[1];
             const byteCharacters = atob(base64Data);
             const byteArrays = new Uint8Array(byteCharacters.length);
@@ -161,6 +165,8 @@ export const TextEditor = (props: TextEditorProps) => {
         });
 
         videos.forEach((video, index) => {
+            if (video.src.includes('/static/')) return;
+
             const base64Data = video.src.split(',')[1];
             const byteCharacters = atob(base64Data);
             const byteArrays = new Uint8Array(byteCharacters.length);
@@ -198,7 +204,7 @@ export const TextEditor = (props: TextEditorProps) => {
             <EditorContent className="w-full" editor={editor} />
             {editor && <TextEditorFloatingMenu editor={editor} />}
             <Button isDisabled={isButtonDisabled} onPress={handleSaveClick} className="self-end">
-                Опубликовать!
+                {defaultContent ? 'Сохранить!' : 'Опубликовать!'}
             </Button>
         </VStack>
     );

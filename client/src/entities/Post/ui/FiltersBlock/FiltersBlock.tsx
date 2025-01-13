@@ -25,7 +25,7 @@ export const FiltersBlock = (props: FiltersBlockProps) => {
     const { className, filters, onFiltersChange } = props;
 
     const [localFilters, setLocalFilters] = useState<PostsApiProps>(filters);
-    const [debouncedFilters] = useDebounce<PostsApiProps>(localFilters, 500);
+    const [debouncedFilters] = useDebounce<PostsApiProps>(localFilters, 200);
 
     useEffect(() => {
         onFiltersChange(debouncedFilters);

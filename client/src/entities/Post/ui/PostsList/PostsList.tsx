@@ -17,10 +17,11 @@ import { getUserData } from '@/entities/User';
 
 interface PostsListProps {
     className?: string;
+    own?: boolean;
 }
 
 export const PostsList = (props: PostsListProps) => {
-    const { className } = props;
+    const { className, own } = props;
 
     const navigate = useNavigate();
     const userData = useSelector(getUserData);
@@ -28,7 +29,10 @@ export const PostsList = (props: PostsListProps) => {
     const wrapperRef = useRef() as MutableRefObject<HTMLDivElement>;
     const triggerRef = useRef() as MutableRefObject<HTMLDivElement>;
 
-    const [filters, setFilters] = useState<PostsApiProps>({ page: 1 });
+    const [filters, setFilters] = useState<PostsApiProps>({
+        page: 1,
+        owner: own ? 'own' : 'any',
+    });
 
     const {
         data: posts,
