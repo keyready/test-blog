@@ -5,7 +5,7 @@ import { ThunkConfig } from '@/app/providers/StoreProvider/config/StateSchema';
 
 export const deletePost = createAsyncThunk<
     string,
-    number,
+    string,
     ThunkConfig<{ code: number; message: string }>
 >('Post/deletePost', async (postId, thunkAPI) => {
     const { extra, rejectWithValue } = thunkAPI;

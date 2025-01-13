@@ -1,5 +1,5 @@
 import { memo, useCallback, useEffect } from 'react';
-import { Navigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import classes from './EditPostPage.module.scss';
@@ -13,6 +13,8 @@ import { VStack } from '@/shared/ui/Stack';
 import { RoutePath } from '@/shared/config/routeConfig';
 import { Skeleton } from '@/shared/ui/Skeleton';
 import { editPost } from '@/entities/Post/model/services/editPost';
+import { deletePost } from '@/entities/Post/model/services/deletePost';
+import { toastDispatch } from '@/widgets/Toaster';
 
 interface EditPostPageProps {
     className?: string;
@@ -24,6 +26,8 @@ const EditPostPage = memo((props: EditPostPageProps) => {
     const { id } = useParams<{ id: string }>();
 
     const dispatch = useAppDispatch();
+
+    const navigate = useNavigate();
 
     const post = useSelector(getPostData);
     const isPostLoading = useSelector(getPostIsLoading);
@@ -52,6 +56,18 @@ const EditPostPage = memo((props: EditPostPageProps) => {
         },
         [dispatch, id],
     );
+
+    const handleDeletePost = useCallback(async () => {
+        if (id) {
+            const result = await toastDispatch(dispatch(deletePost(id)), {
+                loading: 'Удаляем...',
+                success: 'Статья удалена',
+                error: 'Что-то сломалось (',
+            });
+
+            if (result.meta.requestStatus === 'fulfilled') navigate(RoutePath.own_posts);
+        }
+    }, [id, dispatch, navigate]);
 
     if (isPostLoading) {
         return (
@@ -92,7 +108,11 @@ const EditPostPage = memo((props: EditPostPageProps) => {
         <Page className={classNames(classes.EditPostPage, {}, [className])}>
             <VStack maxW gap="24px">
                 <h1 className="text-2xl leading-8 font-bold italic">Редактирование публикации</h1>
-                <TextEditor defaultContent={post} onSave={handleSaveChanges} />
+                <TextEditor
+                    onDeletePost={handleDeletePost}
+                    defaultContent={post}
+                    onSave={handleSaveChanges}
+                />
             </VStack>
         </Page>
     );

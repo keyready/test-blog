@@ -23,7 +23,7 @@ import { TextEditorToolbar } from '../TextEditorToolbar/TextEditorToolbar';
 import { TextEditorFloatingMenu } from '../TextEditorFloatingMenu/TextEditorFloatingMenu';
 
 import { Button } from '@/shared/ui/Button';
-import { VStack } from '@/shared/ui/Stack';
+import { HStack, VStack } from '@/shared/ui/Stack';
 import { Input } from '@/shared/ui/Input';
 import { Post } from '@/entities/Post';
 
@@ -33,12 +33,13 @@ const CustomDocument = Document.extend({
 
 interface TextEditorProps {
     onSave: (content: FormData) => void;
+    onDeletePost?: () => void;
     defaultContent?: Post;
     isLoading?: boolean;
 }
 
 export const TextEditor = (props: TextEditorProps) => {
-    const { onSave, isLoading = false, defaultContent } = props;
+    const { onSave, isLoading = false, onDeletePost, defaultContent } = props;
 
     const [postTitle, setPostTitle] = useState<string>(defaultContent?.title || '');
 
@@ -203,9 +204,21 @@ export const TextEditor = (props: TextEditorProps) => {
             <TextEditorToolbar editor={editor} />
             <EditorContent className="w-full" editor={editor} />
             {editor && <TextEditorFloatingMenu editor={editor} />}
-            <Button isDisabled={isButtonDisabled} onPress={handleSaveClick} className="self-end">
-                {defaultContent ? 'Сохранить!' : 'Опубликовать!'}
-            </Button>
+            <HStack maxW justify="end" gap="24px">
+                {defaultContent && (
+                    <Button onPress={onDeletePost} color="danger" className="self-end">
+                        Удалить публикацию
+                    </Button>
+                )}
+                <Button
+                    isDisabled={isButtonDisabled}
+                    color="success"
+                    onPress={handleSaveClick}
+                    className="self-end"
+                >
+                    {defaultContent ? 'Сохранить!' : 'Опубликовать!'}
+                </Button>
+            </HStack>
         </VStack>
     );
 };
