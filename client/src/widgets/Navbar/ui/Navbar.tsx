@@ -15,8 +15,7 @@ import { classNames } from '@/shared/lib/classNames';
 import { HStack } from '@/shared/ui/Stack';
 import { AppLink } from '@/shared/ui/AppLink';
 import { RoutePath } from '@/shared/config/routeConfig';
-import { AuthModal } from '@/entities/User/ui/AuthModal/AuthModal';
-import { getUserData, getUserIsLoading, logoutService } from '@/entities/User';
+import { AuthModal, getUserData, getUserIsLoading, logoutService } from '@/entities/User';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch';
 
 interface NavbarProps {
@@ -47,7 +46,7 @@ export const Navbar = (props: NavbarProps) => {
             );
         }
 
-        return isProfileFetching ? 'Загрузка...' : 'Login';
+        return isProfileFetching ? 'Загрузка...' : 'Войти';
     }, [userProfile, isProfileFetching]);
 
     return (

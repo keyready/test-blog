@@ -130,7 +130,7 @@ export const TextEditor = (props: TextEditorProps) => {
 
     const isButtonDisabled = useMemo(
         () => !editor?.getText().length || !postTitle,
-        [editor, postTitle],
+        [editor?.getText(), postTitle],
     );
 
     const handleSaveClick = useCallback(async () => {

@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
     Button,
     Dropdown,
@@ -7,6 +7,7 @@ import {
     DropdownTrigger,
     SharedSelection,
 } from '@nextui-org/react';
+import { useDebounce } from 'use-debounce';
 
 import { PostsApiProps } from '../../api/PostApi';
 
@@ -23,14 +24,21 @@ interface FiltersBlockProps {
 export const FiltersBlock = (props: FiltersBlockProps) => {
     const { className, filters, onFiltersChange } = props;
 
+    const [localFilters, setLocalFilters] = useState<PostsApiProps>(filters);
+    const [debouncedFilters] = useDebounce<PostsApiProps>(localFilters, 500);
+
+    useEffect(() => {
+        onFiltersChange(debouncedFilters);
+    }, [debouncedFilters, onFiltersChange]);
+
     const handleQueryChange = useCallback(
         (val: string) => {
-            onFiltersChange({
-                ...filters,
+            setLocalFilters({
+                ...localFilters,
                 query: val,
             });
         },
-        [filters, onFiltersChange],
+        [localFilters],
     );
 
     const selectedSort = useMemo(

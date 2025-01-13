@@ -27,6 +27,7 @@ export const TextEditorToolbar = ({ editor }: { editor: Editor | null }) => {
             <div className="button-group">
                 <Tooltip content="Большой заголовок">
                     <button
+                        tabIndex={-1}
                         onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
                         className={editor.isActive('heading', { level: 1 }) ? 'is-active' : ''}
                     >
@@ -35,6 +36,7 @@ export const TextEditorToolbar = ({ editor }: { editor: Editor | null }) => {
                 </Tooltip>
                 <Tooltip content="Средний заголовок">
                     <button
+                        tabIndex={-1}
                         onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
                         className={editor.isActive('heading', { level: 2 }) ? 'is-active' : ''}
                     >
@@ -43,6 +45,7 @@ export const TextEditorToolbar = ({ editor }: { editor: Editor | null }) => {
                 </Tooltip>
                 <Tooltip content="Обычный текст">
                     <button
+                        tabIndex={-1}
                         onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
                         className={editor.isActive('heading', { level: 3 }) ? 'is-active' : ''}
                     >
@@ -54,6 +57,7 @@ export const TextEditorToolbar = ({ editor }: { editor: Editor | null }) => {
             <div className="button-group">
                 <Tooltip content="Выравнивание: слева">
                     <button
+                        tabIndex={-1}
                         onClick={() => editor.chain().focus().setTextAlign('left').run()}
                         className={editor.isActive({ textAlign: 'left' }) ? 'is-active' : ''}
                     >
@@ -62,6 +66,7 @@ export const TextEditorToolbar = ({ editor }: { editor: Editor | null }) => {
                 </Tooltip>
                 <Tooltip content="Выравнивание: по центру">
                     <button
+                        tabIndex={-1}
                         onClick={() => editor.chain().focus().setTextAlign('center').run()}
                         className={editor.isActive({ textAlign: 'center' }) ? 'is-active' : ''}
                     >
@@ -70,6 +75,7 @@ export const TextEditorToolbar = ({ editor }: { editor: Editor | null }) => {
                 </Tooltip>
                 <Tooltip content="Выравнивание: справа">
                     <button
+                        tabIndex={-1}
                         onClick={() => editor.chain().focus().setTextAlign('right').run()}
                         className={editor.isActive({ textAlign: 'right' }) ? 'is-active' : ''}
                     >
@@ -78,6 +84,7 @@ export const TextEditorToolbar = ({ editor }: { editor: Editor | null }) => {
                 </Tooltip>
                 <Tooltip content="Выравнивание: по ширине">
                     <button
+                        tabIndex={-1}
                         onClick={() => editor.chain().focus().setTextAlign('justify').run()}
                         className={editor.isActive({ textAlign: 'justify' }) ? 'is-active' : ''}
                     >
@@ -89,6 +96,7 @@ export const TextEditorToolbar = ({ editor }: { editor: Editor | null }) => {
             <div className="button-group">
                 <Tooltip content="Жирный">
                     <button
+                        tabIndex={-1}
                         onClick={() => editor.chain().focus().toggleBold().run()}
                         className={editor.isActive('bold') ? 'is-active' : ''}
                     >
@@ -97,6 +105,7 @@ export const TextEditorToolbar = ({ editor }: { editor: Editor | null }) => {
                 </Tooltip>
                 <Tooltip content="Курсив">
                     <button
+                        tabIndex={-1}
                         onClick={() => editor.chain().focus().toggleItalic().run()}
                         className={editor.isActive('italic') ? 'is-active' : ''}
                     >
@@ -105,6 +114,7 @@ export const TextEditorToolbar = ({ editor }: { editor: Editor | null }) => {
                 </Tooltip>
                 <Tooltip content="Зачеркнутый">
                     <button
+                        tabIndex={-1}
                         onClick={() => editor.chain().focus().toggleStrike().run()}
                         className={editor.isActive('strike') ? 'is-active' : ''}
                     >
@@ -116,6 +126,7 @@ export const TextEditorToolbar = ({ editor }: { editor: Editor | null }) => {
             <div className="button-group">
                 <Tooltip content="Ненумерованный список">
                     <button
+                        tabIndex={-1}
                         onClick={() => editor.chain().focus().toggleBulletList().run()}
                         className={editor.isActive('bulletList') ? 'is-active' : ''}
                     >
@@ -124,6 +135,7 @@ export const TextEditorToolbar = ({ editor }: { editor: Editor | null }) => {
                 </Tooltip>
                 <Tooltip content="Нумерованный список">
                     <button
+                        tabIndex={-1}
                         onClick={() => editor.chain().focus().toggleOrderedList().run()}
                         className={editor.isActive('orderedList') ? 'is-active' : ''}
                     >
@@ -135,6 +147,7 @@ export const TextEditorToolbar = ({ editor }: { editor: Editor | null }) => {
             <div className="button-group">
                 <Tooltip content="Цитата">
                     <button
+                        tabIndex={-1}
                         onClick={() => editor.chain().focus().toggleBlockquote().run()}
                         className={editor.isActive('blockquote') ? 'is-active' : ''}
                     >
@@ -143,6 +156,7 @@ export const TextEditorToolbar = ({ editor }: { editor: Editor | null }) => {
                 </Tooltip>
                 <Tooltip content="Код">
                     <button
+                        tabIndex={-1}
                         onClick={() => editor.chain().focus().toggleCodeBlock().run()}
                         className={editor.isActive('codeBlock') ? 'is-active' : ''}
                     >
@@ -154,6 +168,7 @@ export const TextEditorToolbar = ({ editor }: { editor: Editor | null }) => {
             <div className="button-group">
                 <Tooltip content="Текст: белый">
                     <button
+                        tabIndex={-1}
                         onClick={() => editor.chain().focus().setColor('#fff').run()}
                         className={
                             editor.isActive('textStyle', { color: '#fff' }) ? 'is-active' : ''
@@ -164,6 +179,7 @@ export const TextEditorToolbar = ({ editor }: { editor: Editor | null }) => {
                 </Tooltip>
                 <Tooltip content="Текст: черный">
                     <button
+                        tabIndex={-1}
                         onClick={() => editor.chain().focus().setColor('#000').run()}
                         className={
                             editor.isActive('textStyle', { color: '#000' }) ? 'is-active' : ''
@@ -174,6 +190,7 @@ export const TextEditorToolbar = ({ editor }: { editor: Editor | null }) => {
                 </Tooltip>
                 <Tooltip content="Текст: фиолетовый">
                     <button
+                        tabIndex={-1}
                         onClick={() => editor.chain().focus().setColor('#958DF1').run()}
                         className={
                             editor.isActive('textStyle', { color: '#958DF1' }) ? 'is-active' : ''
@@ -184,6 +201,7 @@ export const TextEditorToolbar = ({ editor }: { editor: Editor | null }) => {
                 </Tooltip>
                 <Tooltip content="Текст: красный">
                     <button
+                        tabIndex={-1}
                         onClick={() => editor.chain().focus().setColor('#F98181').run()}
                         className={
                             editor.isActive('textStyle', { color: '#F98181' }) ? 'is-active' : ''
@@ -197,6 +215,7 @@ export const TextEditorToolbar = ({ editor }: { editor: Editor | null }) => {
             <div className="button-group">
                 <Tooltip content="Фон: оранжевый">
                     <button
+                        tabIndex={-1}
                         onClick={() =>
                             editor.chain().focus().toggleHighlight({ color: '#ffc078' }).run()
                         }
@@ -209,6 +228,7 @@ export const TextEditorToolbar = ({ editor }: { editor: Editor | null }) => {
                 </Tooltip>
                 <Tooltip content="Фон: красный">
                     <button
+                        tabIndex={-1}
                         onClick={() =>
                             editor.chain().focus().toggleHighlight({ color: 'red' }).run()
                         }

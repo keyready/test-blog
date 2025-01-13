@@ -6,3 +6,5 @@ export { signupUser } from './model/services/authServices/signupUser';
 export { loginUser } from './model/services/authServices/loginUser';
 export { getUserDataService } from './model/services/profileServices/getUserData';
 export { logoutService } from './model/services/authServices/logoutService';
+
+export { AuthModal } from './ui/AuthModal/AuthModal';

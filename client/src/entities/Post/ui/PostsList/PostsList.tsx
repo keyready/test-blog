@@ -1,5 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { MutableRefObject, useCallback, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
+import toast from 'react-hot-toast';
 
 import { PostCard } from '../PostCard/PostCard';
 import { PostsApiProps, usePosts } from '../../api/PostApi';
@@ -11,6 +13,7 @@ import { VStack } from '@/shared/ui/Stack';
 import { Button } from '@/shared/ui/Button';
 import { RoutePath } from '@/shared/config/routeConfig';
 import { useInfiniteScroll } from '@/shared/lib/hooks/useInfiniteScroll';
+import { getUserData } from '@/entities/User';
 
 interface PostsListProps {
     className?: string;
@@ -20,6 +23,7 @@ export const PostsList = (props: PostsListProps) => {
     const { className } = props;
 
     const navigate = useNavigate();
+    const userData = useSelector(getUserData);
 
     const wrapperRef = useRef() as MutableRefObject<HTMLDivElement>;
     const triggerRef = useRef() as MutableRefObject<HTMLDivElement>;
@@ -43,6 +47,14 @@ export const PostsList = (props: PostsListProps) => {
         }
     }, [posts]);
 
+    const handleCreatePostClick = useCallback(() => {
+        if (userData?.id) {
+            navigate(RoutePath.create_post);
+        } else {
+            toast.error('Для публикации поста необходимо авторизоваться');
+        }
+    }, [navigate, userData?.id]);
+
     useInfiniteScroll({
         callback: handleLoadMorePosts,
         triggerRef,
@@ -52,14 +64,11 @@ export const PostsList = (props: PostsListProps) => {
     if (!posts?.posts.length && !isPostsLoading) {
         return (
             <VStack maxW>
-                <FiltersBlock filters={filters} onFiltersChange={setFilters} />
+                <FiltersBlock className="mb-5" filters={filters} onFiltersChange={setFilters} />
 
                 <h1 className="text-xl">В блоге пока нет постов (</h1>
                 <h2 className="text-l">Будьте первым!</h2>
-                <Button
-                    onPress={() => navigate(RoutePath.create_post)}
-                    className="py-2 px-5 h-fit rounded-md"
-                >
+                <Button onPress={handleCreatePostClick} className="mt-5 py-2 px-5 h-fit rounded-md">
                     Рассказать всем!
                 </Button>
             </VStack>
